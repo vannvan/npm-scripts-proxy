@@ -8,6 +8,7 @@ import { parseArgs } from './libs/tool.js'
 import presets from './preset.js'
 import { defineNSPConfig } from './cli.js'
 import prettier from 'prettier'
+import inquirer from 'inquirer'
 const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'))
 
 // 有效的配置文件
@@ -76,8 +77,7 @@ class Nsp implements INsp {
   async parseUserConfig() {
     try {
       const userConfigFile = path.resolve(ValidUserConfigFile)
-      let isExit = existsSync(userConfigFile)
-      if (!isExit) {
+      if (!this.exitConfig()) {
         throw '配置文件不存在'
       }
       const Conf = await import(userConfigFile)
@@ -90,39 +90,69 @@ class Nsp implements INsp {
   }
 
   printHelp() {
-    const indent = Array(2).fill('').join(' ')
+    const indent = ' '.repeat(2)
     if (this.allScripts.length == 0) {
       Log.warn('没有有效的命令配置')
       return
     }
 
     // 最长的命令
-    let maxCmdLength = Math.max(...this.allScripts.map((el) => el.cmd.length))
+    const maxCmdLength = Math.max(...this.allScripts.map((el) => el.cmd.length))
 
-    Log.help(`当前项目支持的命令,请通过一下方式执行 \n`)
+    Log.help(`当前项目支持的命令，请通过一下方式执行： \n`)
 
     this.allScripts.forEach((item) => {
-      let needSpace = maxCmdLength - item.cmd.length
-      let space = Array(needSpace + 4)
-        .fill('')
-        .join(' ')
+      const needSpace = maxCmdLength - item.cmd.length
+      const space = ' '.repeat(needSpace + 4)
       Log.help(`${indent} $ ${this.appName} ${item.cmd}${space}${item.desc}`)
     })
 
-    Log.help(`\n 提示：如果需要补充脚本，请通过 ${ValidUserConfigFile} 进行配置`)
+    Log.help(`\n提示：如果需要补充脚本，请通过 ${ValidUserConfigFile} 进行配置`)
   }
 
   executeScript(cmd: string) {
-    exec(cmd, (err, sto) => {
+    exec(cmd, (err, _sto) => {
       if (err) {
         Log.error(err.stack)
       } else {
-        Log.info(sto)
+        // Log.info(sto)
       }
     })
   }
 
+  exitConfig() {
+    const userConfigFile = path.resolve(ValidUserConfigFile)
+    const isExit = existsSync(userConfigFile)
+    return isExit
+  }
+
   genConfigByUserPkg() {
+    if (this.exitConfig()) {
+      inquirer
+        .prompt([
+          {
+            type: 'confirm',
+            message: '配置已存在，是否替换',
+            name: 'replace',
+          },
+        ])
+        .then((answers: any) => {
+          const { replace } = answers
+          if (replace) {
+            this.writeTemplate(true)
+          } else {
+            process.exit(0)
+          }
+        })
+        .catch((error: { stack: string }) => {
+          Log.error(error.stack)
+        })
+    } else {
+      this.writeTemplate()
+    }
+  }
+
+  writeTemplate(isReplace?: boolean) {
     const userPKG = JSON.parse(readFileSync(path.resolve('package.json'), 'utf8'))
 
     const { scripts } = userPKG
@@ -139,12 +169,13 @@ class Nsp implements INsp {
 
     const template = `import { defineNSPConfig, presets } from 'npm-scripts-proxy'
     export default defineNSPConfig({
-      scripts: ${JSON.stringify(userScripts, null, 4)},
+      scripts: ${JSON.stringify(userScripts)},
     })`
 
     try {
       const content = prettier.format(template, { semi: false, parser: 'babel' })
       writeFileSync(ValidUserConfigFile, content)
+      isReplace && Log.success('配置已生成，请继续补充必要信息哦~')
     } catch (error) {
       Log.error(error.stack)
     }

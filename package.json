@@ -1,6 +1,6 @@
 {
   "name": "npm-scripts-proxy",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Let npm-scripts have a better experience!",
   "keywords": [
     "npm-scripts",
@@ -38,6 +38,7 @@
     "@types/node": "^18.16.0",
     "chalk": "4",
     "glob": "7",
+    "inquirer": "^9.2.7",
     "prettier": "^2.8.8",
     "rimraf": "^5.0.0",
     "ts-node": "^10.9.1",
