@@ -1,7 +1,7 @@
 {
   "name": "npm-scripts-proxy",
-  "version": "0.0.1",
-  "description": "npm-scripts代理工具，提升开发体验，维护更好的scripts配置",
+  "version": "0.0.2",
+  "description": "Let npm-scripts have a better experience!",
   "keywords": [
     "npm-scripts",
     "npm-scripts-proxy"
@@ -27,8 +27,8 @@
     "dist"
   ],
   "scripts": {
-    "start": "tsc --watch",
     "build": "tsc",
+    "start": "tsc --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {

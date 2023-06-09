@@ -8,6 +8,54 @@
 
 简体中文｜[English](README.md)
 
+## 缘何？
+
+如果你有这么多`npm-scripts`配置，或者你需要这些脚本的使用说明
+
+```js
+"scripts": {
+  "analyze": "cross-env ANALYZE=1 umi build",
+  "start": "cross-env UMI_ENV=dev umi dev",
+  "dev": "npm run start:dev",
+  "start:dev": "cross-env REACT_APP_ENV=dev MOCK=none UMI_ENV=dev umi dev",
+  "start:no-mock": "cross-env MOCK=none UMI_ENV=dev umi dev",
+  "start:no-ui": "cross-env UMI_UI=none UMI_ENV=dev umi dev",
+  "start:pre": "cross-env REACT_APP_ENV=pre UMI_ENV=pre umi dev",
+  "start:test": "cross-env REACT_APP_ENV=test MOCK=none UMI_ENV=test umi dev",
+  "start:lcic": "cross-env REACT_APP_ENV=dev MOCK=none UMI_ENV=lcic umi dev",
+  "build:test": "cross-env UMI_ENV=test umi build",
+  "build:pt": "cross-env UMI_ENV=pt umi build",
+  "build:pre": "cross-env UMI_ENV=pre umi build",
+  "build:prod": "cross-env UMI_ENV=prod umi build",
+  "build:canary": "cross-env UMI_ENV=canary umi build",
+  "build:hw": "cross-env UMI_ENV=hw umi build",
+  "build:ms": "cross-env UMI_ENV=ms umi build",
+  "deploy": "npm run site && npm run gh-pages",
+  "gh-pages": "gh-pages -d dist",
+  "i18n-remove": "pro i18n-remove --locale=zh-CN --write",
+  "postinstall": "umi g tmp",
+  "lint": "umi g tmp && npm run lint:js && npm run lint:style && npm run lint:prettier",
+  "lint-staged": "lint-staged",
+  "lint-staged:js": "eslint --ext .js,.jsx,.ts,.tsx ",
+  "lint:fix": "eslint --fix --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./src && npm run lint:style",
+  "lint:js": "eslint --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./src",
+  "lint:prettier": "prettier --check \"src/**/*\" --end-of-line auto",
+  "lint:style": "stylelint --fix \"src/**/*.less\" --syntax less",
+  "openapi": "umi openapi",
+  "precommit": "",
+  "prettier": "prettier -c --write \"src/**/*\"",
+  "pretest": "node ./tests/beforeTest",
+  "test": "umi test",
+  "test:all": "node ./tests/run-tests.js",
+  "test:component": "umi test ./src/components",
+  "tsc": "tsc --noEmit",
+  "prepare": "husky install"
+},
+
+```
+
+那么通过`npm-scripts-proxy`可以让它变得更好！
+
 ## 安装
 
 > npm i npm-scripts-proxy
