@@ -1,0 +1,46 @@
+{
+  "name": "npm-scripts-proxy",
+  "version": "0.0.1",
+  "description": "npm-scripts代理工具，提升开发体验，维护更好的scripts配置",
+  "keywords": [
+    "npm-scripts",
+    "npm-scripts-proxy"
+  ],
+  "homepage": "https://github.com/vannvan/npm-scripts-proxy#readme",
+  "bugs": {
+    "url": "https://github.com/vannvan/npm-scripts-proxy/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vannvan/npm-scripts-proxy.git"
+  },
+  "license": "MIT",
+  "author": "vannvan",
+  "type": "module",
+  "main": "dist/app.js",
+  "types": "dist/app.d.ts",
+  "bin": {
+    "nsp": "dist/app.js"
+  },
+  "files": [
+    "package.json",
+    "dist"
+  ],
+  "scripts": {
+    "start": "tsc --watch",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@artus/tsconfig": "^1.0.1",
+    "@types/chalk": "^2.2.0",
+    "@types/glob": "^8.1.0",
+    "@types/node": "^18.16.0",
+    "chalk": "4",
+    "glob": "7",
+    "prettier": "^2.8.8",
+    "rimraf": "^5.0.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}

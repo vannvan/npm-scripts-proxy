@@ -1,0 +1,16 @@
+{
+  "extends": "@artus/tsconfig",
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ESNext",
+    "outDir": "dist",
+    "sourceMap": false,
+    "inlineSourceMap": true,
+    "noUnusedLocals": false,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "declaration": true,
+    "skipLibCheck": true
+  },
+  "include": ["./src/**/*"]
+}
